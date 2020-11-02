@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { useQuery, gql } from "@apollo/client";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+const POST_DATA_QUERY: any = gql`
+  {
+    posts {
+      title
+      slug
+    }
+  }
+`;
+const App = () => {
+  const { loading, error, data } = useQuery(POST_DATA_QUERY);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  return data.posts.map(({ title, slug }: any) => (
+    <div key={title}>
+      <p style={{ color: "green" }}>{title}</p>
+      <p style={{ color: "red" }}>{slug}</p>
     </div>
-  );
-}
+  ));
+};
 
 export default App;
